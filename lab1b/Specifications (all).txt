@@ -1,0 +1,55 @@
+1.a) Simple data types: integer (int), boolean (bool)
+b) User-defined type: int_list
+
+Note: The language is strongly typed
+
+2. Statements
+a) assignment: <-
+b) input / output: read x / write x (based on the type of x, similar to std::cin and std::cout in C++)
+c) conditional: if (boolean) { } // (similar to C languages)
+d) loop: while (boolean) { }
+
+3.a) Identifiers are no more than 256 characters
+b) constants: integer (123, -233), boolean (true, false)
+
+Lexic.txt:
+
+4. Alphabet
+a) Upper (A-Z) and lower case letters (a-z) of the English alphabet
+b) Underline character '_'
+c) Decimal digits (0-9)
+
+5. Lexic
+a) Special symbols, representing:
+- operators: <- + - * / % < <= = > >= and or .add .get
+- separators: {} () ; space tab new-line
+- reserved words: int, bool, int_list, if, while, read, write
+
+b) Identifiers (A sequence of letters and  digits, such that the first character is a letter), the rule is:
+identifier = letter{letter|digit}
+letter = "A" | "B" | ... | "Z"
+digit = "0" | "1" | ... | "9"
+
+c) Constants
+- Integer (ex: 0, 1, -1, -0, +0, -00, +00, -0002345, 765, +765):
+integer = ["+"|"-"]digit{digit}
+
+- Boolean (ex: true, false):
+boolean = "true" | "false"
+
+6. Syntax - Syntatical rules:
+program = [blank]{statement[blank]}
+blank = (" " | "\t" | "\n") [blank]
+statement = declaration_stmt | assignment_stmt | if_stmt | while_stmt | read_stmt | write_stmt | list_add_stmt
+declaration_stmt = type blank identifier [blank] ";"
+type = "int" | "bool" | "int_list"
+assignment_stmt = identifier [blank] "<-" [blank] expression [blank] ";"
+expression = constant | identifier | (expression compound_operator expression)
+constant = integer | boolean
+compound_operator = "<-" | "+" | "-" | "*" | "/" | "%" | "<" | "<=" | "=" | ">" | ">=" | "and" | "or" | ".get"
+if_stmt = "if" [blank] "(" [blank] expression [blank] ")" [blank] compound_stmt
+compound_stmt = "{" [blank] { statement [blank] } "}"
+while_stmt = "while" [blank] "(" [blank] expression [blank] ")" [blank] compound_stmt
+read_stmt = "read" blank identifier ";"
+write_stmt = "write" blank identifier ";"
+list_add_stmt = identifier blank ".add" blank expression [blank] ";"

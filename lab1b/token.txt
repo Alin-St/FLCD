@@ -1,0 +1,2 @@
+5.a) Special symbols, representing:
+- reserved words: int, bool, int_list, if, while, read, write
