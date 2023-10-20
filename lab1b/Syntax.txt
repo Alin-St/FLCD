@@ -10,7 +10,7 @@ statement = declaration_stmt | assignment_stmt | if_stmt | while_stmt | read_stm
 declaration_stmt = type blank identifier [blank] ";"
 type = "int" | "bool" | "int_list"
 assignment_stmt = identifier [blank] "<-" [blank] expression [blank] ";"
-expression = constant | identifier | (expression compound_operator expression)
+expression = constant | identifier | (expression compound_operator expression) | "(" expression  ")"
 constant = integer | boolean
 compound_operator = "<-" | "+" | "-" | "*" | "/" | "%" | "<" | "<=" | "=" | ">" | ">=" | "and" | "or" | ".get"
 if_stmt = "if" [blank] "(" [blank] expression [blank] ")" [blank] compound_stmt

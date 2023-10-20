@@ -1,2 +1,5 @@
-5.a) Special symbols, representing:
+5. Lexic
+a) Special symbols, representing:
+- operators: <- + - * / % < <= = > >= and or .add .get
+- separators: {} () ; space tab new-line
 - reserved words: int, bool, int_list, if, while, read, write
