@@ -17,6 +17,7 @@ public class HashTable<TKey, TValue>
         return Math.Abs(key!.GetHashCode()) % buckets.Length;
     }
 
+    /// <summary> Adds the key and value to the hash table. If the key already exists, a duplicate is added. </summary>
     public void Add(TKey key, TValue value)
     {
         int index = GetHashIndex(key);
@@ -29,6 +30,7 @@ public class HashTable<TKey, TValue>
         Count++;
     }
 
+    /// <summary>  Returns the value associated with the key. If the key is not found, throws an exception. </summary>
     public TValue Find(TKey key)
     {
         int index = GetHashIndex(key);
