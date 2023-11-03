@@ -19,3 +19,8 @@ is the position in the SymbolTable of the token if it is an identifier or consta
 
 In order to perform the lexical analysis, the Scanner tries to continuously match the beginning od the file with a regular expression
 for each type of token possible. If a match is found, the token is added to the PIF, and the file is updated by removing the token.
+
+The Regexes used for matching identifiers and constants are (found in Scanner.cs):
+* identifier regex: `"^[a-zA-Z][a-zA-Z0-9_]*"`
+* integer regex: `"^[0-9]+"`
+* boolean regex: `"^(true|false)"`
