@@ -19,4 +19,9 @@ internal class SymbolTable
         tokens.Add(token, position);
         return position;
     }
+
+    public List<KeyValuePair<string, int>> ListAll()
+    {
+        return tokens.ListAll();
+    }
 }

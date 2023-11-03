@@ -47,4 +47,20 @@ public class HashTable<TKey, TValue>
 
         throw new KeyNotFoundException("Key not found in the hash table");
     }
+
+    public List<KeyValuePair<TKey, TValue>> ListAll()
+    {
+        var result = new List<KeyValuePair<TKey, TValue>>();
+
+        foreach (List<KeyValuePair<TKey, TValue>> bucket in buckets)
+        {
+            if (bucket != null)
+            {
+                foreach (var pair in bucket)
+                    result.Add(pair);
+            }
+        }
+
+        return result;
+    }
 }
