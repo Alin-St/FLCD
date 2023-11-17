@@ -12,8 +12,8 @@ internal class Scanner
     readonly string[] KEYWORDS = new[] { "int", "bool", "int_list", "if", "while", "read", "write" };
 
     readonly string IDENTIFIER_REGEX = @"^[a-zA-Z][a-zA-Z0-9_]*";
-    readonly string INTEGER_REGEX = @"^[0-9]+";
-    readonly string BOOLEAN_REGEX = @"^(true|false)";
+    readonly string INTEGER_REGEX = @"^[0-9]+($|[^a-zA-Z_])";
+    readonly string BOOLEAN_REGEX = @"^(true|false)($|[^a-zA-Z0-9_])";
 
     readonly List<(string pattern, TokenType tokenType)> REGX_PATTERNS = new();
 

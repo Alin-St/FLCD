@@ -1,4 +1,6 @@
-﻿namespace Interpreter;
+﻿using System.Text.RegularExpressions;
+
+namespace Interpreter;
 
 internal class Program
 {
@@ -17,6 +19,7 @@ internal class Program
             return;
         }
 
+        Console.WriteLine("Program:\n" + File.ReadAllText("sample_program.txt") + "\n");
         DisplaySymbolTable(scanner.SymbolTable);
         Console.WriteLine();
         DisplayPIF(scanner.PIF);
@@ -34,6 +37,6 @@ internal class Program
     {
         Console.WriteLine("PIF:");
         foreach (var entry in pif.Tokens)
-            Console.WriteLine($"{entry.Token} -> {entry.STPosition}");
+            Console.WriteLine($"{Regex.Escape(entry.Token)} -> {entry.STPosition}");
     }
 }
