@@ -8,6 +8,12 @@ internal class Program
     {
         Directory.SetCurrentDirectory(@"C:\Alin\Projects\UBB-Sem-V\FLCD\FCLD\Interpreter\Interpreter\_Run\");
 
+        //RunScannerExample();
+        RunFAExample();
+    }
+
+    static void RunScannerExample()
+    {
         var scanner = new Scanner();
         try
         {
@@ -38,5 +44,11 @@ internal class Program
         Console.WriteLine("PIF:");
         foreach (var entry in pif.Tokens)
             Console.WriteLine($"{Regex.Escape(entry.Token)} -> {entry.STPosition}");
+    }
+
+    static void RunFAExample()
+    {
+        var fa = new FiniteAutomaton("fa.txt");
+        fa.IsAccepted("");
     }
 }
