@@ -1,0 +1,14 @@
+C:\Alin\Projects\UBB-Sem-V\FLCD\FCLD\Parser\Parser\bin\Debug\net6.0\Parser.exe
+C:\Alin\Projects\UBB-Sem-V\FLCD\FCLD\Parser\Parser\bin\Debug\net6.0\Parser.deps.json
+C:\Alin\Projects\UBB-Sem-V\FLCD\FCLD\Parser\Parser\bin\Debug\net6.0\Parser.runtimeconfig.json
+C:\Alin\Projects\UBB-Sem-V\FLCD\FCLD\Parser\Parser\bin\Debug\net6.0\Parser.dll
+C:\Alin\Projects\UBB-Sem-V\FLCD\FCLD\Parser\Parser\bin\Debug\net6.0\Parser.pdb
+C:\Alin\Projects\UBB-Sem-V\FLCD\FCLD\Parser\Parser\obj\Debug\net6.0\Parser.GeneratedMSBuildEditorConfig.editorconfig
+C:\Alin\Projects\UBB-Sem-V\FLCD\FCLD\Parser\Parser\obj\Debug\net6.0\Parser.AssemblyInfoInputs.cache
+C:\Alin\Projects\UBB-Sem-V\FLCD\FCLD\Parser\Parser\obj\Debug\net6.0\Parser.AssemblyInfo.cs
+C:\Alin\Projects\UBB-Sem-V\FLCD\FCLD\Parser\Parser\obj\Debug\net6.0\Parser.csproj.CoreCompileInputs.cache
+C:\Alin\Projects\UBB-Sem-V\FLCD\FCLD\Parser\Parser\obj\Debug\net6.0\Parser.dll
+C:\Alin\Projects\UBB-Sem-V\FLCD\FCLD\Parser\Parser\obj\Debug\net6.0\refint\Parser.dll
+C:\Alin\Projects\UBB-Sem-V\FLCD\FCLD\Parser\Parser\obj\Debug\net6.0\Parser.pdb
+C:\Alin\Projects\UBB-Sem-V\FLCD\FCLD\Parser\Parser\obj\Debug\net6.0\Parser.genruntimeconfig.cache
+C:\Alin\Projects\UBB-Sem-V\FLCD\FCLD\Parser\Parser\obj\Debug\net6.0\ref\Parser.dll

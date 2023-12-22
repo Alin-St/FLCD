@@ -1,0 +1,25 @@
+﻿N = int bool int_list statement declaration_stmt type assignment_stmt expression constant compound_operator if_stmt compound_stmt while_stmt read_stmt write_stmt list_add_stmt blank program identifier restIdentifier letter digit integer boolean
+E = + - * / % < <= = > >= and or .add { } ( ) ; space tab \n int bool int_list identifier integer boolean " "\t" "\n"
+S = program
+program -> blank { statement blank }
+program -> ε
+blank -> ( " " | "\t" | "\n" ) blank | ε
+statement -> declaration_stmt | assignment_stmt | if_stmt | while_stmt | read_stmt | write_stmt | list_add_stmt
+declaration_stmt -> type blank identifier blank ";"
+type -> "int" | "bool" | "int_list"
+assignment_stmt -> identifier blank "<-" blank expression blank ";"
+expression -> constant | identifier | "(" expression compound_operator expression ")"
+constant -> integer | boolean
+compound_operator -> "<-" | "+" | "-" | "*" | "/" | "%" | "<" | "<=" | "=" | ">" | ">=" | "and" | "or" | ".get"
+if_stmt -> "if" blank "(" blank expression blank ")" blank compound_stmt
+compound_stmt -> "{" blank statement blank "}" | "{" blank "}" | "{" statement blank "}" | "{" blank statement "}"
+while_stmt -> "while" blank "(" blank expression blank ")" blank compound_stmt
+read_stmt -> "read" blank identifier blank ";"
+write_stmt -> "write" blank identifier blank ";"
+list_add_stmt -> identifier blank ".add" blank expression blank ";"
+identifier -> letter { restIdentifier }
+restIdentifier -> letter restIdentifier | digit restIdentifier | ε
+letter -> "A" | "B" | ... | "Z" | "a" | "b" | ... | "z"
+digit -> "0" | "1" | ... | "9"
+integer -> ["+"|"-"] digit { digit }
+boolean -> "true" | "false"
