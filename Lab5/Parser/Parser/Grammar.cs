@@ -1,71 +1,93 @@
-﻿class Grammar
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+class Grammar
 {
-    public List<string> N { get; private set; } = new(); // non-terminals
-    public List<string> E { get; private set; } = new(); // terminals
-    public string S { get; private set; } = ""; // starting symbol/axiom
-    public Dictionary<string, List<List<string>>> P { get; private set; } = new(); // finite set of productions
+    public static string EPSILON = "epsilon";
 
-    private static List<string> ProcessLine(string line, string delimiter = " ")
+    public List<string> N { get; set; }  // non-terminals
+    public List<string> E { get; set; }  // terminals
+    public string S { get; set; }        // starting symbol/ axiom
+    public Dictionary<string, List<List<string>>> P { get; set; }  // finite set of productions
+
+    public Grammar()
     {
-        return line.Trim().TrimStart('{').TrimEnd('}').Split(delimiter)
-                   .Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToList();
+        N = new List<string>();
+        E = new List<string>();
+        S = "";
+        P = new Dictionary<string, List<List<string>>>();
     }
 
-    private static List<List<string>> ParseProductions(string productions)
-    {
-        return productions.Split('|')
-                          .Select(production => production.Trim().Split().ToList())
-                          .ToList();
-    }
-
-    public void ReadFromFile(string fileName)
+    public void Rebuild()
     {
         N.Clear();
         E.Clear();
         S = "";
         P.Clear();
+    }
 
-        using var file = new StreamReader(fileName);
-        string line;
+    static List<string> ProcessLine(string line, string delimiter = " ")
+    {
+        var elements = new List<string>(line.Trim().Trim('{', '}').Split(delimiter));
 
-        while ((line = file.ReadLine()!) != null)
+        if (elements.Count > 1)
         {
-            if (line.StartsWith("N = "))
-            {
-                N = ProcessLine(line.Split('=')[1], ", ");
-            }
-            else if (line.StartsWith("E = "))
-            {
-                E = ProcessLine(line[(line.IndexOf('=') + 1)..].Trim(), ", ");
+            elements[0] += delimiter;
+            var combined = string.Join("", elements.GetRange(0, 2));
+            elements.RemoveRange(0, 2);
+            elements.Insert(0, combined);
+        }
 
-                // E = ProcessLine(line.Split('=')[1], ", "); // bugged
-            }
-            else if (line.StartsWith("S = "))
+        return elements.ConvertAll(element => element.Trim());
+    }
+
+    public void ReadFromFile(string fileName)
+    {
+        Rebuild();
+        using var file = new StreamReader(fileName);
+        string line = file.ReadLine()!;
+        N = ProcessLine(line.Split('=')[1], ", ");
+
+        line = file.ReadLine()!;
+        E = ProcessLine(line[(line.IndexOf('=') + 1)..].Trim(), ", ");
+
+        line = file.ReadLine()!;
+        S = ProcessLine(line.Split('=')[1], ", ")[0];
+
+        while ((line = file.ReadLine()!) != null && line.Trim() != "" && !line.Contains(" -> ")) ;
+
+        while (line != null)
+        {
+            if (line.Contains(" -> "))
             {
-                S = ProcessLine(line.Split('=')[1], ", ")[0];
-            }
-            else if (line.Contains(" -> "))
-            {
-                var splitLine = line.Split(new[] { " -> " }, StringSplitOptions.None);
-                string source = splitLine[0].Trim();
-                string productions = splitLine[1];
-                if (P.ContainsKey(source))
+                string[] parts = line.Split(" -> ");
+                string source = parts[0].Trim();
+                string productions = parts[1];
+                foreach (var production in productions.Split('|'))
                 {
-                    P[source].AddRange(ParseProductions(productions));
-                }
-                else
-                {
-                    P[source] = ParseProductions(productions);
+                    var productionArr = production.Trim().Replace("epsilon", EPSILON).Split();
+                    if (P.ContainsKey(source))
+                    {
+                        P[source].Add(productionArr.ToList());
+                    }
+                    else
+                    {
+                        P[source] = new List<List<string>> { productionArr.ToList() };
+                    }
                 }
             }
+
+            line = file.ReadLine()!;
         }
     }
 
-    public bool CheckCFG()
+    public bool CheckCfg()
     {
         bool hasStartingSymbol = false;
 
-        foreach (var key in P.Keys)
+        foreach (string key in P.Keys)
         {
             if (key == S)
             {
@@ -83,13 +105,13 @@
             return false;
         }
 
-        foreach (var production in P.Values)
+        foreach (List<List<string>> production in P.Values)
         {
-            foreach (var rhs in production)
+            foreach (List<string> rhs in production)
             {
-                foreach (var value in rhs)
+                foreach (string value in rhs)
                 {
-                    if (!N[0].Split().Contains(value) && !E[0].Split().Contains(value) && value != "ε")
+                    if (!N[0].Split().Contains(value) && !E[0].Split().Contains(value) && value != EPSILON)
                     {
                         return false;
                     }
@@ -102,17 +124,25 @@
 
     public override string ToString()
     {
-        string result = "N = " + string.Join(", ", N) + "\n";
-        result += "E = " + string.Join(", ", E) + "\n";
+        string result = "N = " + ListToString(N) + "\n";
+        result += "E = " + ListToString(E) + "\n";
         result += "S = " + S + "\n";
-        result += "P = ";
-        foreach (var kv in P)
-        {
-            result += kv.Key + " -> ";
-            result += string.Join(" | ", kv.Value.Select(v => string.Join(" ", v)));
-            result += "\n    ";
-        }
-
+        result += "P = " + DictToString(P) + "\n";
         return result;
+    }
+
+    static string ListToString(List<string> list)
+    {
+        return "[" + string.Join(", ", list.Select(x => $"'{x}'")) + "]";
+    }
+
+    static string ListOfListsToString(List<List<string>> list)
+    {
+        return "[" + string.Join(", ", list.Select(x => ListToString(x))) + "]";
+    }
+
+    static string DictToString(Dictionary<string, List<List<string>>> dict)
+    {
+        return "{" + string.Join(", ", dict.Select(p => $"'{p.Key}': {ListOfListsToString(p.Value)}")) + "}";
     }
 }

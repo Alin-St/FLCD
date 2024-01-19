@@ -1,36 +1,55 @@
-﻿class Program
+﻿using System;
+
+class Program
 {
     static void Main()
     {
         Directory.SetCurrentDirectory("../../../_Run");
 
-        Grammar g = new();
+        var g = new Grammar();
         string fileName = "g1.txt";
         g.ReadFromFile(fileName);
 
-        Console.WriteLine(g.ToString());
+        Console.WriteLine(g);
 
-        if (g.CheckCFG())
+        string baseName = fileName.Split('.')[0];
+        if (g.CheckCfg())
         {
-            Console.WriteLine($"The grammar {fileName} is a CFG\n");
+            Console.WriteLine($"The grammar {baseName} is a CFG\n");
         }
         else
         {
-            Console.WriteLine($"The grammar {fileName} is not a CFG\n");
+            Console.WriteLine($"The grammar {baseName} is not a CFG\n");
         }
 
         fileName = "g2.txt";
         g.ReadFromFile(fileName);
 
-        Console.WriteLine(g.ToString());
+        Console.WriteLine(g);
 
-        if (g.CheckCFG())
+        baseName = fileName.Split('.')[0];
+        if (g.CheckCfg())
         {
-            Console.WriteLine($"The grammar {fileName} is a CFG\n");
+            Console.WriteLine($"The grammar {baseName} is a CFG\n");
         }
         else
         {
-            Console.WriteLine($"The grammar {fileName} is not a CFG\n");
+            Console.WriteLine($"The grammar {baseName} is not a CFG\n");
+        }
+
+        fileName = "g3.txt";
+        g.ReadFromFile(fileName);
+
+        Console.WriteLine(g);
+
+        baseName = fileName.Split('.')[0];
+        if (g.CheckCfg())
+        {
+            Console.WriteLine($"The grammar {baseName} is a CFG\n");
+        }
+        else
+        {
+            Console.WriteLine($"The grammar {baseName} is not a CFG\n");
         }
     }
 }
