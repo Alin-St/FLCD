@@ -1,2 +1,3 @@
 # FCLD
-Read current project documentation at: [/Interpreter/Interpreter/documentation.md](/Interpreter/Interpreter/documentation.md)
+
+This repository contains my work for the "Formal Languages and Compilation Design" course.
