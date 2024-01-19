@@ -1,0 +1,36 @@
+// Compute the sum of n numbers.
+
+write "The number of elements to read: ";
+
+int n;
+read n;
+
+int_list arr;
+
+int i;
+i <- 1;
+
+while (i <= n)
+{
+    int x;
+    read x;
+    arr .add x;
+
+    i <- i + 1;
+}
+
+int sum;
+sum <- 0;
+i <- 1;
+
+while (i <= n)
+{
+    int x;
+    x <- arr .get i;
+    sum <- sum + x;
+
+    i <- i + 1;
+}
+
+write "The total sum is: ";
+write sum;
