@@ -1,0 +1,22 @@
+﻿int a;
+int b;
+int c;
+
+read a;
+read b;
+read c;
+
+int min;
+min <- a;
+
+if (b < min)
+{
+    min <- b;
+}
+
+if (c < min)
+{
+    min <- c;
+}
+
+write min;
