@@ -5,7 +5,7 @@ class Parser
     private readonly Grammar grammar;
     private readonly List<string> sequence;
     private readonly List<object> working;
-    private List<object> input;
+    private List<string> input;
     private string state;
     private int index;
 
@@ -14,7 +14,7 @@ class Parser
         this.grammar = grammar;
         this.sequence = ReadSequence(sequenceFile);
         this.working = new List<object>();
-        this.input = new List<object> { this.grammar.StartSymbol };
+        this.input = new List<string> { this.grammar.StartSymbol };
         this.state = "q";
         this.index = 0;
     }
@@ -35,17 +35,17 @@ class Parser
 
     public void GetSituation()
     {
-        Console.WriteLine($"({this.state}, {this.index}, {string.Join(", ", this.working)}, {string.Join(", ", this.input)})");
+        Console.WriteLine($"({state}, {index}, {Util.ObjListToString(working)}, {Util.StrListToString(input)})");
     }
 
     public void Expand()
     {
         Console.WriteLine("|--- expand");
-        var nonTerminal = (string)this.input.First();
-        this.input.RemoveAt(0);
-        this.working.Add(new Tuple<string, int>(nonTerminal, 0));
+        var nonTerminal = input.First(); // non_terminal = "S"
+        input.RemoveAt(0);
+        working.Add(Tuple.Create(nonTerminal, 0)); // working = [("S", 0)]
 
-        var newProduction = this.grammar.GetProductionsForNonTerminal(nonTerminal)[0];
+        var newProduction = grammar.GetProductionsForNonTerminal(nonTerminal)[0]; // new_production = ["a", "S", "b", "S"]
         this.input = newProduction.Concat(this.input).ToList();
     }
 
@@ -54,22 +54,22 @@ class Parser
         Console.WriteLine("|--- advance");
         var item = this.input.First();
         this.input.RemoveAt(0);
-        this.working.Add(item);
-        this.index++;
+        this.working.Add(item); // working = [("S", 0), "a"]
+        this.index++; // (q, i + 1, w, s)
     }
 
     public void MomentaryInsuccess()
     {
         Console.WriteLine("|--- momentary insuccess");
-        this.state = "b";
+        this.state = "b"; // (b, i, w, s)
     }
 
     public void Back()
     {
         Console.WriteLine("|--- back");
-        var item = this.working.Last();
+        var item = this.working.Last(); // item = "a"
         this.working.RemoveAt(this.working.Count - 1);
-        this.input.Insert(0, item);
+        this.input.Insert(0, (string)item); // self.input = ["S", "a", "S", "b", "S"]
         this.index--;
     }
 
@@ -77,46 +77,47 @@ class Parser
     {
         Console.WriteLine("|--- success");
         this.state = "f";
-        var msg = $"(f, {this.index}, {string.Join(", ", this.working)}, {string.Join(", ", this.input)})\n=> sequence is syntactically correct\n";
+        var msg = $"(f, {this.index}, {Util.ObjListToString(working)}, {Util.StrListToString(input)})\n=> sequence is syntactically correct\n";
         Console.WriteLine(msg);
     }
 
     public void AnotherTry()
     {
         Console.WriteLine("|--- another try");
-        if (this.working.Any())
+        if (working.Any())
         {
             var lastNt = (Tuple<string, int>)this.working.Last();
+            working.RemoveAt(working.Count - 1);
             var nt = lastNt.Item1;
             var productionNr = lastNt.Item2;
 
-            var productions = this.grammar.GetProductionsForNonTerminal(nt);
+            var productions = grammar.GetProductionsForNonTerminal(nt);
 
             if (productionNr + 1 < productions.Count)
             {
-                this.state = "q";
+                state = "q";
 
                 var newTuple = Tuple.Create(nt, productionNr + 1);
-                this.working.Add(newTuple);
+                working.Add(newTuple);
 
                 var lenLastProduction = productions[productionNr].Count;
-                this.input = this.input.Skip(lenLastProduction).ToList();
+                input = input.Skip(lenLastProduction).ToList();
                 var newProduction = productions[productionNr + 1];
-                this.input = newProduction.Concat(this.input).ToList();
+                input = newProduction.Concat(input).ToList();
             }
             else
             {
                 var lenLastProduction = productions[productionNr].Count;
-                this.input = this.input.Skip(lenLastProduction).ToList();
-                if (this.input.Count != 0)
+                input = input.Skip(lenLastProduction).ToList();
+                if (input.Count != 0)
                 {
-                    this.input.Insert(0, nt);
+                    input.Insert(0, nt);
                 }
             }
         }
         else
         {
-            this.state = "e";
+            state = "e";
         }
     }
 
@@ -162,7 +163,7 @@ class Parser
             {
                 if (this.state == "b")
                 {
-                    if (this.working.Any() && this.grammar.Terminals[0].Split(" ").Contains(((Tuple<string, int>)this.working.Last()).Item1))
+                    if (this.working.Any() && this.grammar.Terminals[0].Split(" ").Contains(working.Last()))
                     {
                         this.Back();
                     }

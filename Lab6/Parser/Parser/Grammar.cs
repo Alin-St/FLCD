@@ -1,4 +1,6 @@
-﻿class Grammar
+﻿namespace Parser;
+
+class Grammar
 {
     List<string> N { get; set; }  // non-terminals
     List<string> E { get; set; }  // terminals
@@ -123,30 +125,15 @@
     public List<List<string>> GetProductionsForNonTerminal(string nt)
     {
         var found = P.TryGetValue(nt, out var productions);
-        return (found && productions is not null) ? productions : new();
+        return found && productions is not null ? productions : new();
     }
 
     public override string ToString()
     {
-        string result = "N = " + ListToString(N) + "\n";
-        result += "E = " + ListToString(E) + "\n";
+        string result = "N = " + Util.StrListToString(N) + "\n";
+        result += "E = " + Util.StrListToString(E) + "\n";
         result += "S = " + S + "\n";
-        result += "P = " + DictToString(P) + "\n";
+        result += "P = " + Util.DictStrListListStrToString(P) + "\n";
         return result;
-    }
-
-    static string ListToString(List<string> list)
-    {
-        return "[" + string.Join(", ", list.Select(x => $"'{x}'")) + "]";
-    }
-
-    static string ListOfListsToString(List<List<string>> list)
-    {
-        return "[" + string.Join(", ", list.Select(x => ListToString(x))) + "]";
-    }
-
-    static string DictToString(Dictionary<string, List<List<string>>> dict)
-    {
-        return "{" + string.Join(", ", dict.Select(p => $"'{p.Key}': {ListOfListsToString(p.Value)}")) + "}";
     }
 }
