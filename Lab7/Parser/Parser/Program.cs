@@ -44,6 +44,10 @@ class Program
 
             var parser = new Parser(grammar, sequenceFile);
             parser.Run();
+
+            var parserOutput = new ParserOutput(grammar, sequenceFile);
+            parserOutput.CreateParsingTree(parser.working);
+            parserOutput.WriteParsingTree(parser.state, parser.working, "tree.txt");
         }
     }
 }

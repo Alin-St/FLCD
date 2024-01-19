@@ -4,9 +4,9 @@ class Parser
 {
     private readonly Grammar grammar;
     private readonly List<string> sequence;
-    private readonly List<object> working;
+    public readonly List<object> working;
     private List<string> input;
-    private string state;
+    public string state;
     private int index;
 
     public Parser(Grammar grammar, string sequenceFile)
