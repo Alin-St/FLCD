@@ -1,0 +1,71 @@
+%{
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "lang.tab.h"
+%}
+
+%option noyywrap
+%option caseless
+
+DIGIT [0-9]
+NON_ZERO_DIGIT [1-9]
+INTEGER [+-]?{NON_ZERO_DIGIT}{DIGIT}*|0
+BOOLEAN true|false
+LETTER [a-zA-Z_]
+SIGNS [ !#%^*+-/<=>_.,:;]
+STRING (\"({LETTER}|{DIGIT}|_|{SIGNS})*\")
+IDENTIFIER {LETTER}({LETTER}|{DIGIT})*
+%%
+
+"int" { printf("reserved word: %s\n", yytext); return INT; }
+"bool" { printf("reserved word: %s\n", yytext); return BOOL; }
+"int_list" { printf("reserved word: %s\n", yytext); return INTLIST; }
+"if" { printf("reserved word: %s\n", yytext); return IF; }
+"while" { printf("reserved word: %s\n", yytext); return WHILE; }
+"read" { printf("reserved word: %s\n", yytext); return READ; }
+"write" { printf("reserved word: %s\n", yytext); return WRITE; }
+
+"<-" { printf("operator: %s\n", yytext); return ASSIGN; }
+"+" { printf("operator: %s\n", yytext); return PLUS; }
+"-" { printf("operator: %s\n", yytext); return MINUS; }
+"*" { printf("operator: %s\n", yytext); return MUL; }
+"/" { printf("operator: %s\n", yytext); return DIV; }
+"%" { printf("operator: %s\n", yytext); return MOD; }
+"<" { printf("operator: %s\n", yytext); return LT; }
+"<=" { printf("operator: %s\n", yytext); return LE; }
+"=" { printf("operator: %s\n", yytext); return EQ; }
+">" { printf("operator: %s\n", yytext); return GT; }
+">=" { printf("operator: %s\n", yytext); return GE; }
+"and" { printf("operator: %s\n", yytext); return AND; }
+"or" { printf("operator: %s\n", yytext); return OR; }
+".add" { printf("operator: %s\n", yytext); return ADD; }
+".get" { printf("operator: %s\n", yytext); return GET; }
+
+"{"  { printf("separator: %s\n", yytext); return BRACKETOPEN; }
+"}" { printf("separator: %s\n", yytext); return BRACKETCLOSE; }
+"(" { printf("separator: %s\n", yytext); return PARANT_OPEN; }
+")" { printf("separator: %s\n", yytext); return PARANT_CLOSE; }
+";" { printf("separator: %s\n", yytext); return SEMICOLON; }
+"end" { printf("separator: %s\n", yytext); return END_BLOCK; }
+"begin" { printf("separator: %s\n", yytext); return BEGIN_BLOCK; }
+"endl" { printf("separator: %s\n", yytext); return ENDL; }
+
+{BOOLEAN} {printf("boolean: %s\n", yytext); return BOOLEAN; }
+
+{IDENTIFIER} {printf("identifier: %s\n", yytext); return IDENTIFIER; }
+
+{INTEGER} {printf("integer: %s\n", yytext); return INTEGER; }
+
+{STRING} {printf("string: %s\n", yytext); return STRING; }
+
+[ \t]+ {}
+
+"//"(.)*[\n]+ {++yylineno;}
+
+
+[\n]+ {++yylineno;}
+
+. {printf("Error at token %s at line %d\n", yytext, yylineno); exit(1);}
+
+%%
