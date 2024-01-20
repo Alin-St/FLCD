@@ -1,0 +1,49 @@
+%{
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+%}
+
+%option noyywrap
+%option caseless
+
+DIGIT [0-9]
+NON_ZERO_DIGIT [1-9]
+INTEGER [+-]?{NON_ZERO_DIGIT}{DIGIT}*|0
+LETTER [a-zA-Z_]
+SIGNS [ !#%^*+-/<=>_.,:;]
+STRING_CONSTANT (\"({LETTER}|{DIGIT}|_|{SIGNS})*\")
+IDENTIFIER {LETTER}({LETTER}|{DIGIT})*
+%%
+
+"int"|"bool"|"int_list"|"if"|"while"|"read"|"write" {printf("RESERVED WORD: %s\n", yytext);}
+
+"<-"|"+"|"-"|"*"|"/"|"%"|"<"|"<="|"="|">"|">="|"and"|"or"|".add"|".get" printf("OPERATOR: %s\n", yytext);
+
+"{"|"}"|"("|")"|";"|"end"|"begin"|"endl" printf("SEPARATORS: %s\n", yytext);
+
+{IDENTIFIER} {printf("IDENTIFIER: %s\n", yytext);}
+
+{INTEGER} {printf("INTEGER: %s\n", yytext);}
+
+{STRING_CONSTANT} {printf("STRING CONSTANT: %s\n", yytext);}
+
+[ \t]+ {}
+
+"//"(.)*[\n]+ {++yylineno;}
+
+
+[\n]+ {++yylineno;}
+
+. {printf("Error at token %s at line %d\n", yytext, yylineno); exit(1);}
+
+%%
+
+int main(int argc, char** argv) {
+    if (argc > 1)
+        yyin = fopen(argv[1], "r");
+    else
+        yyin = stdin;
+    yylex();
+}
+
